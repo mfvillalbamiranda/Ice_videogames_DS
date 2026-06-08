@@ -1,6 +1,7 @@
 # Ice_videogames_DS
-Trabajas para la tienda online Ice que vende videojuegos por todo el mundo. Las reseñas de usuarios y expertos, los géneros, las plataformas (por ejemplo, Xbox o PlayStation) y los datos históricos sobre las ventas de juegos están disponibles en fuentes abiertas. Tienes que identificar patrones que determinen si un juego tiene éxito o no. Esto te permitirá detectar proyectos prometedores y planificar campañas publicitarias.
 
+Trabajas para la tienda online Ice que vende videojuegos por todo el mundo. Las reseñas de usuarios y expertos, los géneros, las plataformas (por ejemplo, Xbox o PlayStation) y los datos históricos sobre las ventas de juegos están disponibles en fuentes abiertas. Tienes que identificar patrones que determinen si un juego tiene éxito o no. Esto te permitirá detectar proyectos prometedores y planificar campañas publicitarias.
+<!--
 Delante de ti hay datos que se remontan a 2016. Imaginemos que es diciembre de 2016 y estás planeando una campaña para 2017.
 
 Lo importante es adquirir experiencia de trabajo con datos. Realmente no importa si estás pronosticando las ventas de 2017 en función de los datos de 2016 o las ventas de 2027 en función de los datos de 2026.
@@ -84,3 +85,50 @@ Formato: Completa la tarea en Jupyter Notebook. Inserta el código de programaci
 — Rating (ESRB)
 
 Es posible que los datos de 2016 estén incompletos.
+-->
+
+## Objetivo de negocio
+El objetivo principal es identificar los patrones clave que determinan el éxito comercial de un videojuego a nivel global y regional, utilizando datos históricos hasta el año 2016. Esto permitirá a la tienda online Ice tomar decisiones basadas en datos para:
+- Detectar proyectos y plataformas emergentes más prometedoras para el año 2017
+- Optimizar la asignación del presupuesto publicitario mediante campañas de marketing focalizadas
+- Maximizar los ingresos adaptando la oferta de videojuegos según el perfil de consumo y las preferencias específicas de cada región geográfica (Norteamérica, Europa y Japón).
+
+## Descripción del dataset
+El conjunto de datos contiene el histórico de ventas de videojuegos en diferentes regiones, junto con sus clasificaciones y calificaciones. Tras un análisis exploratorio de datos (EDA), las variables principales son:
+- name: Nombre del videojuego
+- platform: Plataforma de lanzamiento (ej. PS4, XOne, PC, 3DS)
+- year_of_release: Año en que se lanzó el juego al mercado
+- genre: Categoría o género del videojuego (Acción, Deportes, Shooter, etc.)
+- na_sales, eu_sales, jp_sales, other_sales: Ventas en millones de dólares (USD) para Norteamérica, Europa, Japón y el resto del mundo respectivamente
+- total_sales: Columna calculada que representa la suma global de las ventas de un juego en todas las regiones
+- critic_score: Puntuación otorgada por la crítica especializada (escala de 0 a 100)
+- user_score: Puntuación otorgada por los usuarios (escala de 0 a 10; procesando los valores "TBD" como ausentes para no sesgar el análisis)
+- rating: Clasificación por edades otorgada por la ESRB (E, T, M, E10+, etc.).
+
+## Metodología
+Para resolver el problema, se siguió un pipeline estructurado de análisis de datos:
+- Preparación y Limpieza de Datos: Conversión de los nombres de columnas a minúsculas, corrección de tipos de datos (como user_score a tipo flotante) y manejo de valores nulos o indeterminados ("TBD"). Creación de la métrica agregada total_sales.
+- EDA: Determinación del ciclo de vida promedio de las consolas (identificado en aproximadamente 7-10 años) y definición del período relevante (2012-2016) para proyectar el año 2017.
+  - Análisis de la distribución de ventas mediante diagramas de caja (boxplots) para comparar el rendimiento de las plataformas líderes (PS4, Xbox One, 3DS).
+  - Evaluación del impacto de las reseñas sobre las ventas mediante gráficos de dispersión y coeficientes de correlación de Pearson.
+- Perfilado de Usuarios por Región: Segmentación geográfica para identificar el Top 5 de plataformas y géneros, analizando también el impacto de la clasificación ESRB en cada mercado.
+- Prueba de Hipótesis Estadísticas: Aplicación de pruebas inferenciales para validar supuestos sobre las calificaciones de los usuarios.
+
+## Métricas
+Las métricas clave empleadas para medir el éxito y validar los patrones fueron:
+- Ventas Totales Brutas (en millones de USD): Métrica principal de éxito comercial.
+- Mediana y Cuartiles de Ventas (vía Boxplots): Para entender el comportamiento del "juego promedio" frente a los grandes éxitos (outliers).
+- Coeficiente de Correlación de Pearson ($r$): Para medir la fuerza y dirección de la relación lineal entre las puntuaciones de las reseñas (crítica/usuarios) y las ventas del juego.
+- Valor P ($p\text{-value}$): Métrica de significancia estadística utilizada en las pruebas de hipótesis para aceptar o rechazar la hipótesis nula ($\alpha = 0.05$).
+
+## Resultados
+- Ciclo de Vida y Consolas Líderes: Se determinó que las plataformas tardan en promedio de 3 a 5 años en crecer y el mismo tiempo en desaparecer. Para el año 2017, las plataformas más rentables y en su fase de madurez son PS4 y Xbox One, mientras que la Nintendo 3DS sigue siendo sumamente relevante en el mercado asiático.
+- Impacto de las Reseñas: Se encontró una correlación positiva moderada entre las calificaciones de los críticos y las ventas (los juegos con altas notas de la prensa tienden a vender más). Sorprendentemente, las calificaciones de los usuarios mostraron una correlación prácticamente nula con las ventas comerciales.
+- Preferencias Regionales:
+   - Norteamérica (NA) y Europa (EU): Comparten un perfil muy similar; sus consolas preferidas son PS4 y XOne, y su género predilecto es Action y Shooter. Los juegos clasificación M (Adultos) dominan el mercado.
+   - Japón (JP): Rompe el patrón occidental por completo. La consola líder absoluta es la portátil Nintendo 3DS. El género más vendido es, por amplio margen, Role-Playing (RPG) y la clasificación ESRB tiene un impacto distinto debido a que muchos juegos locales no se rigen inicialmente por este sistema norteamericano (dejando muchos datos en blanco o favoreciendo clasificaciones aptas para adolescentes).
+
+## Conclusiones
+Las campañas de marketing deben enfocarse de forma diferenciada. Para el mercado occidental (NA y EU), los esfuerzos deben concentrarse en títulos de acción y disparos para PS4 y Xbox One. Para el mercado japonés, la inversión debe dirigirse a juegos de rol (RPG) para la familia de consolas de Nintendo.
+A la hora de seleccionar qué juegos promocionar activamente en la tienda Ice, se debe priorizar aquellos que cuenten con un excelente Critic Score, ya que la opinión de la prensa especializada funciona como un predictor del volumen de ventas mucho más confiable que la opinión masiva de los usuarios.
+Importancia del factor demográfico (ESRB): Los juegos con clasificación M (Mature) representan la mayor fuente de ingresos en Occidente, lo que demuestra que el público objetivo con mayor poder adquisitivo en estas regiones prefiere experiencias de juego más maduras y complejas.
